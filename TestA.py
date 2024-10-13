@@ -54,7 +54,7 @@ def app():
         selezione = st.selectbox('Login/Signup', ['Login', 'Sign Up'])
 
         if selezione == 'Login':
-            st.markdown('Sei già registrato?')
+            st.markdown('##Sei già registrato?')
             email = st.text_input('Indirizzo Email')
             password = st.text_input('Password', type='password')
 
@@ -67,7 +67,7 @@ def app():
                     st.error(f'Login fallito: {error_message}')
 
         elif selezione == 'Sign Up':  # Sezione di registrazione
-            st.markdown('Registrati:')
+            st.markdown('##Registrati:')
             email = st.text_input('Indirizzo Email (Registrazione)')
             password = st.text_input('Password (Registrazione)', type='password')
 
