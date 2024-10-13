@@ -50,9 +50,11 @@ def app():
     
     # Sezione di login/signup
     elif st.session_state.page == "login_signup":
-        selezione = st.selectbox('###Login/Signup', ['Login', 'Sign Up'])
+        st.title('Modigliana Calcio')
+        selezione = st.selectbox('Login/Signup', ['Login', 'Sign Up'])
 
         if selezione == 'Login':
+            st.markdown('Sei già registrato?')
             email = st.text_input('Indirizzo Email')
             password = st.text_input('Password', type='password')
 
@@ -65,6 +67,7 @@ def app():
                     st.error(f'Login fallito: {error_message}')
 
         elif selezione == 'Sign Up':  # Sezione di registrazione
+            st.markdown('Registrati:')
             email = st.text_input('Indirizzo Email (Registrazione)')
             password = st.text_input('Password (Registrazione)', type='password')
 
