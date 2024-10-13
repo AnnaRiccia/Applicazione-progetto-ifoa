@@ -2,7 +2,7 @@ import streamlit as st
 import firebase_admin
 import requests
 from firebase_admin import credentials, auth
-
+import os
 # Percorso del file delle credenziali
 firebase_credentials = os.getenv('FIREBASE_CREDENTIALS')
 cred = credentials.Certificate(eval(firebase_credentials))
