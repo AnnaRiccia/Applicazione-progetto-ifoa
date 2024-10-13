@@ -45,7 +45,7 @@ def app():
     # Pagina principale
     if st.session_state.get('page', 'home') == "home":
         st.title('Modigliana Calcio')  # Scritta principale
-        st.markdown('applicazione in cantiere!')  # Messaggio di benvenuto
+        st.markdown('Applicazione in cantiere!')  # Messaggio di benvenuto
         st.markdown('Questa è la pagina principale. Puoi navigare per accedere o registrarti.')
     
     # Sezione di login/signup
