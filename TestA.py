@@ -50,7 +50,7 @@ def app():
     
     # Sezione di login/signup
     elif st.session_state.page == "login_signup":
-        selezione = st.selectbox('#Login/Signup', ['Login', 'Sign Up'])
+        selezione = st.selectbox('###Login/Signup', ['Login', 'Sign Up'])
 
         if selezione == 'Login':
             email = st.text_input('Indirizzo Email')
