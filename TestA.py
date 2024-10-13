@@ -67,7 +67,7 @@ def app():
                     st.error(f'Login fallito: {error_message}')
 
         elif selezione == 'Sign Up':  # Sezione di registrazione
-            st.markdown('## Registrati:')
+            st.markdown('## Crea le tue credenziali!')
             email = st.text_input('Indirizzo Email (Registrazione)')
             password = st.text_input('Password (Registrazione)', type='password')
 
