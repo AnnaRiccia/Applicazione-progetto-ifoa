@@ -16,7 +16,6 @@ db = firestore.client()  # Inizializza Firestore
 
 FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
 
-
 # Funzione per autenticare l'utente con email e password tramite la REST API di Firebase
 def authenticate_user(email, password):
     url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={FIREBASE_API_KEY}"
@@ -26,8 +25,7 @@ def authenticate_user(email, password):
         "returnSecureToken": True
     }
     response = requests.post(url, json=payload)
-    result = response.json()
-    return result
+    return response.json()
 
 # Funzione per inviare una email di recupero password
 def send_password_reset(email):
@@ -79,7 +77,6 @@ def app():
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     st.success(f'Benvenuto, {email}!')
                     st.session_state.page = "user_profile"  # Passa alla pagina del profilo
-                    st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
                 else:
                     error_message = response.get('error', {}).get('message', 'Errore di autenticazione')
                     st.error(f'Login fallito: {error_message}')
@@ -87,7 +84,6 @@ def app():
         # Sezione Sign Up
         elif selezione == 'Sign Up':
             st.session_state.page = "signup_email"  # Cambia a una nuova pagina per la registrazione dell'email
-            st.experimental_rerun()  # Ricarica l'app per visualizzare la nuova pagina
 
         # Sezione Recupera password
         elif selezione == 'Recupera password':
@@ -115,7 +111,6 @@ def app():
 
                 # Passa alla pagina successiva per inserire nome, cognome e data di nascita
                 st.session_state.page = "signup_details"
-                st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
 
             except Exception as e:
                 st.error('Creazione account fallita: ' + str(e))
@@ -143,7 +138,6 @@ def app():
             st.success('Registrazione completata con successo!')
 
             st.session_state.page = "home"  # Torna alla pagina principale dopo la registrazione
-            st.experimental_rerun()  # Ricarica per mostrare la pagina principale
 
     # Nuova pagina per il profilo utente
     elif st.session_state.page == "user_profile":
