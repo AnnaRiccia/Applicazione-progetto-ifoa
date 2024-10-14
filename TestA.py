@@ -73,7 +73,14 @@ def app():
                 if 'idToken' in response:
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     st.success(f'Benvenuto, {email}!')
-                    st.session_state.page = "user_profile"  # Passa alla pagina del profilo
+                    
+                    # Controlla se l'utente ha già un profilo
+                    user_doc = db.collection('users').document(st.session_state.user_email).get()
+                    if user_doc.exists:
+                        st.session_state.page = "user_profile"  # Passa alla pagina del profilo
+                    else:
+                        st.session_state.page = "complete_profile"  # Reindirizza per completare il profilo
+
                 else:
                     st.warning('Credenziali errate. Riprova.') 
 
@@ -117,7 +124,26 @@ def app():
                 else:
                     st.warning('Invio della richiesta di recupero fallito. Riprova.')  # Messaggio generico
 
-    # Nuova pagina per il profilo utente
+    # Nuova pagina per completare il profilo utente
+    elif st.session_state.page == "complete_profile":
+        st.title('Completa il tuo profilo')
+        st.markdown('Inserisci i seguenti dati per completare la registrazione.')
+
+        first_name = st.text_input('Nome', key='first_name_complete')
+        last_name = st.text_input('Cognome', key='last_name_complete')
+        year_of_birth = st.number_input('Anno di nascita', min_value=1900, max_value=2024, step=1, key='year_of_birth_complete')
+
+        if st.button('Completa Profilo'):
+            # Salva le informazioni nel Firestore
+            db.collection('users').document(st.session_state.user_email).set({
+                'first_name': first_name,
+                'last_name': last_name,
+                'year_of_birth': year_of_birth
+            })
+            st.success('Profilo completato con successo!')
+            st.session_state.page = "user_profile"  # Passa alla pagina del profilo
+
+    # Pagina per il profilo utente
     elif st.session_state.page == "user_profile":
         st.title('Profilo Utente')
         st.markdown('Ecco le tue informazioni.')
