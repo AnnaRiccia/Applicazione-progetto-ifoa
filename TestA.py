@@ -12,7 +12,6 @@ cred = credentials.Certificate(eval(firebase_credentials))
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
 
-# Inserisci qui la tua Firebase API Key direttamente
 FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
 
 
