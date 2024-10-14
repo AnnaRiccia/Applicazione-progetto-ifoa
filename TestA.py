@@ -6,13 +6,11 @@ import os
 # Percorso del file delle credenziali
 firebase_credentials = os.getenv('FIREBASE_CREDENTIALS')
 cred = credentials.Certificate(eval(firebase_credentials))
-
+# Firebase API Key
+FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
 # Inizializza Firebase solo se non è già stato fatto
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
-
-# Inserisci qui la tua Firebase API Key direttamente
-FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
 
 # Funzione per autenticare l'utente con email e password tramite la REST API di Firebase
 def authenticate_user(email, password):
@@ -24,7 +22,6 @@ def authenticate_user(email, password):
     }
     response = requests.post(url, json=payload)
     result = response.json()
-    print(result)  # Stampa il risultato per il debug
     return result
 
 # Funzione per inviare una email di recupero password
@@ -36,33 +33,37 @@ def send_password_reset(email):
     }
     response = requests.post(url, json=payload)
     result = response.json()
+    if 'error' in result:
+        return {"error": result['error']['message']}
     return result
 
 def app():
-    # Finestra laterale a sinistra
-    st.sidebar.title("Menu") 
+    # Finestra laterale
+    st.sidebar.title("Menu")
+    
     # Pulsante "HOME"
     if st.sidebar.button("HOME"):
-        st.session_state.page = "home"  # Imposta la pagina a HOME
+        st.session_state.page = "home"
 
     # Pulsante "Sei un giocatore?"
     if st.sidebar.button("Sei un giocatore?"):
         if st.session_state.get('page', 'home') == "login_signup":
-            st.session_state.page = "home"  # Torna a HOME se già su login_signup
+            st.session_state.page = "home"
         else:
-            st.session_state.page = "login_signup"  # Imposta la pagina a login/signup
+            st.session_state.page = "login_signup"
 
     # Pagina principale
     if st.session_state.get('page', 'home') == "home":
-        st.title('Modigliana Calcio')  # Scritta principale
-        st.markdown('Applicazione in cantiere!')  # Messaggio di benvenuto
+        st.title('Modigliana Calcio')
+        st.markdown('Applicazione in cantiere!')
         st.markdown('Questa è la pagina principale. Puoi navigare per accedere o registrarti.')
-    
-    # Sezione di login/signup
+
+    # Sezione di login/signup/recupero password
     elif st.session_state.page == "login_signup":
         st.title('Modigliana Calcio')
         selezione = st.selectbox('Login/Signup', ['Login', 'Sign Up', 'Recupera password'])
 
+        # Sezione Login
         if selezione == 'Login':
             st.markdown('## Sei già registrato?')
             email = st.text_input('Indirizzo Email')
@@ -75,7 +76,8 @@ def app():
                     error_message = response.get('error', {}).get('message', 'Errore di autenticazione')
                     st.error(f'Login fallito: {error_message}')
 
-        elif selezione == 'Sign Up':  # Sezione di registrazione
+        # Sezione Sign Up
+        elif selezione == 'Sign Up':
             st.markdown('## Crea le tue credenziali!')
             email = st.text_input('Indirizzo Email (Registrazione)')
             password = st.text_input('Password (Registrazione)', type='password')
@@ -86,16 +88,18 @@ def app():
                     st.markdown('Accedere con email e password')
                 except Exception as e:
                     st.error('Creazione account fallita: ' + str(e))
-        elif selezione == 'Recupera password':  # Sezione di recupero password separata
+
+        # Sezione Recupera password
+        elif selezione == 'Recupera password':
             st.markdown('## Recupera la tua password')
             reset_email = st.text_input('Inserisci il tuo indirizzo email per il recupero')
             if st.button('Invia Richiesta di Recupero'):
                 response = send_password_reset(reset_email)
-                if 'email' in response:
+                if 'error' not in response:
                     st.success('Email di recupero inviata con successo! Controlla la tua casella email.')
                 else:
-                    error_message = response.get('error', {}).get('message', 'Errore durante il recupero password')
-                    st.error(f'Recupero password fallito: {error_message}')
+                    st.error(f'Recupero password fallito: {response["error"]}')
 
 if __name__ == '__main__':
     app()
+
