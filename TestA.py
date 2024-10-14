@@ -77,7 +77,7 @@ def app():
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     st.success(f'Benvenuto, {email}!')
                     st.session_state.page = "user_profile"  # Passa alla pagina del profilo
-                    st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
+                    st.rerun()  # Ricarica per mostrare la nuova pagina
                 else:
                     error_message = response.get('error', {}).get('message', 'Errore di autenticazione')
                     st.error(f'Login fallito: {error_message}')
@@ -113,7 +113,7 @@ def app():
 
                 # Passa alla pagina successiva per inserire nome, cognome e data di nascita
                 st.session_state.page = "signup_details"
-                st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
+                st.rerun()  # Ricarica per mostrare la nuova pagina
 
             except Exception as e:
                 st.error('Creazione account fallita: ' + str(e))
