@@ -26,7 +26,15 @@ def authenticate_user(email, password):
     result = response.json()
     print(result)  # Stampa il risultato per il debug
     return result
-
+def send_password_reset(email):
+    url = f"https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key={FIREBASE_API_KEY}"
+    payload = {
+        "requestType": "PASSWORD_RESET",
+        "email": email
+    }
+    response = requests.post(url, json=payload)
+    result = response.json()
+    return result
 def app():
     # Finestra laterale a sinistra
     st.sidebar.title("Menu")
@@ -65,7 +73,17 @@ def app():
                 else:
                     error_message = response.get('error', {}).get('message', 'Errore di autenticazione')
                     st.error(f'Login fallito: {error_message}')
+        elif selezione == 'Recupera Password':
+            st.markdown('## Recupera la tua password')
+            email = st.text_input('Inserisci il tuo indirizzo email per il recupero')
 
+            if st.button('Recupera Password'):
+                response = send_password_reset(email)
+                if 'email' in response:
+                    st.success('Email di recupero inviata con successo! Controlla la tua casella email.')
+                else:
+                    error_message = response.get('error', {}).get('message', 'Errore durante il recupero password')
+                    st.error(f'Recupero password fallito: {error_message}')
         elif selezione == 'Sign Up':  # Sezione di registrazione
             st.markdown('## Crea le tue credenziali!')
             email = st.text_input('Indirizzo Email (Registrazione)')
@@ -78,6 +96,7 @@ def app():
                     st.markdown('Accedere con email e password')
                 except Exception as e:
                     st.error('Creazione account fallita: ' + str(e))
+
 
 if __name__ == '__main__':
     app()
