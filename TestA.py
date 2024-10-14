@@ -50,10 +50,7 @@ def app():
 
     # Pulsante "Sei un giocatore?"
     if st.sidebar.button("Sei un giocatore?"):
-        if st.session_state.get('page', 'home') == "login_signup":
-            st.session_state.page = "home"
-        else:
-            st.session_state.page = "login_signup"
+        st.session_state.page = "login_signup"
 
     # Pagina principale
     if st.session_state.get('page', 'home') == "home":
@@ -77,13 +74,25 @@ def app():
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     st.success(f'Benvenuto, {email}!')
                     st.session_state.page = "user_profile"  # Passa alla pagina del profilo
+                    st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
                 else:
                     error_message = response.get('error', {}).get('message', 'Errore di autenticazione')
                     st.error(f'Login fallito: {error_message}')
 
         # Sezione Sign Up
         elif selezione == 'Sign Up':
-            st.session_state.page = "signup_email"  # Cambia a una nuova pagina per la registrazione dell'email
+            st.markdown('### Registrati qui')
+            email = st.text_input('Indirizzo Email (Registrazione)')
+            password = st.text_input('Password (Registrazione)', type='password')
+            if st.button('Crea Account'):
+                try:
+                    # Crea un nuovo utente con email e password
+                    user = auth.create_user(email=email, password=password)
+                    st.success('Account creato con successo!')
+                    st.session_state.user_email = email  # Salva l'email dell'utente
+                    st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
+                except Exception as e:
+                    st.error('Creazione account fallita: ' + str(e))
 
         # Sezione Recupera password
         elif selezione == 'Recupera password':
@@ -95,49 +104,6 @@ def app():
                     st.success('Email di recupero inviata con successo! Controlla la tua casella email.')
                 else:
                     st.error(f'Recupero password fallito: {response["error"]}')
-
-    # Nuova pagina per la registrazione dell'email
-    elif st.session_state.page == "signup_email":
-        st.title('Registrazione Nuovo Utente')
-        st.markdown('Compila i campi sottostanti per completare la registrazione.')
-
-        email = st.text_input('Indirizzo Email (Registrazione)')
-        password = st.text_input('Password (Registrazione)', type='password')
-        if st.button('Crea Account'):
-            try:
-                # Crea un nuovo utente con email e password
-                user = auth.create_user(email=email, password=password)
-                st.success('Account creato con successo!')
-
-                # Passa alla pagina successiva per inserire nome, cognome e data di nascita
-                st.session_state.page = "signup_details"
-
-            except Exception as e:
-                st.error('Creazione account fallita: ' + str(e))
-
-    # Nuova pagina per inserire nome, cognome e anno di nascita
-    elif st.session_state.page == "signup_details":
-        st.title('Completa la Registrazione')
-        st.markdown('Compila i campi sottostanti per completare il profilo.')
-
-        first_name = st.text_input('Nome')
-        last_name = st.text_input('Cognome')
-        year_of_birth = st.number_input('Anno di nascita', min_value=1900, max_value=2024, step=1)
-
-        if st.button('Completa Registrazione'):
-            # Salva le informazioni nel Firestore
-            user_doc = {
-                'first_name': first_name,
-                'last_name': last_name,
-                'year_of_birth': year_of_birth,
-                'email': st.session_state.user_email  # Usa l'email salvata
-            }
-
-            # Salva i dati dell'utente in Firestore
-            db.collection('users').document(st.session_state.user_email).set(user_doc)
-            st.success('Registrazione completata con successo!')
-
-            st.session_state.page = "home"  # Torna alla pagina principale dopo la registrazione
 
     # Nuova pagina per il profilo utente
     elif st.session_state.page == "user_profile":
@@ -160,6 +126,7 @@ def app():
                     'year_of_birth': year_of_birth
                 })
                 st.success('Informazioni aggiornate con successo!')
+                st.experimental_rerun()  # Ricarica per mostrare le nuove informazioni
 
         else:
             st.error('Nessuna informazione trovata.')
