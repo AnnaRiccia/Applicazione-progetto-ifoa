@@ -73,6 +73,7 @@ def app():
                 if 'idToken' in response:
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     st.success(f'Benvenuto, {email}!')
+                    st.text('doppio clic')
                     st.session_state.page = "user_profile"  # Passa alla pagina del profilo
                 else:
                     st.warning('Credenziali errate. Riprova.') 
