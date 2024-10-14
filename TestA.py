@@ -85,7 +85,7 @@ def app():
         # Sezione Sign Up
         elif selezione == 'Sign Up':
             st.session_state.page = "signup_email"  # Cambia a una nuova pagina per la registrazione dell'email
-            st.experimental_rerun()  # Ricarica l'app per visualizzare la nuova pagina
+            st.rerun()  # Ricarica l'app per visualizzare la nuova pagina
 
         # Sezione Recupera password
         elif selezione == 'Recupera password':
