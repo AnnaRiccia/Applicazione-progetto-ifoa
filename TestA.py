@@ -1,16 +1,18 @@
 import streamlit as st
 import firebase_admin
 import requests
-from firebase_admin import credentials, auth
+from firebase_admin import credentials, auth, firestore
 import os
 
-
+# Ottieni le credenziali di Firebase dall'ambiente
 firebase_credentials = os.getenv('FIREBASE_CREDENTIALS')
 cred = credentials.Certificate(eval(firebase_credentials))
 
 # Inizializza Firebase solo se non è già stato fatto
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
+
+db = firestore.client()  # Inizializza Firestore
 
 FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
 
@@ -24,8 +26,8 @@ def authenticate_user(email, password):
         "returnSecureToken": True
     }
     response = requests.post(url, json=payload)
-    result = response.json()
-    return result
+    return response.json()
+
 
 # Funzione per inviare una email di recupero password
 def send_password_reset(email):
@@ -40,10 +42,11 @@ def send_password_reset(email):
         return {"error": result['error']['message']}
     return result
 
+
 def app():
     # Finestra laterale
     st.sidebar.title("Menu")
-    
+
     # Pulsante "HOME"
     if st.sidebar.button("HOME"):
         st.session_state.page = "home"
@@ -148,25 +151,29 @@ def app():
         st.title('Profilo Utente')
         st.markdown('Ecco le tue informazioni.')
 
-        # Recupera i dati dell'utente da Firestore
-        user_doc = db.collection('users').document(st.session_state.user_email).get()
-        if user_doc.exists:
-            user_data = user_doc.to_dict()
-            first_name = st.text_input('Nome', value=user_data.get('first_name'), key='first_name')
-            last_name = st.text_input('Cognome', value=user_data.get('last_name'), key='last_name')
-            year_of_birth = st.number_input('Anno di nascita', min_value=1900, max_value=2024, step=1, value=user_data.get('year_of_birth'))
+        # Verifica se l'email dell'utente è presente
+        if 'user_email' in st.session_state:
+            # Recupera i dati dell'utente da Firestore
+            user_doc = db.collection('users').document(st.session_state.user_email).get()
+            if user_doc.exists:
+                user_data = user_doc.to_dict()
+                first_name = st.text_input('Nome', value=user_data.get('first_name'), key='first_name')
+                last_name = st.text_input('Cognome', value=user_data.get('last_name'), key='last_name')
+                year_of_birth = st.number_input('Anno di nascita', min_value=1900, max_value=2024, step=1, value=user_data.get('year_of_birth'))
 
-            if st.button('Aggiorna Informazioni'):
-                # Aggiorna i dati nel Firestore
-                db.collection('users').document(st.session_state.user_email).update({
-                    'first_name': first_name,
-                    'last_name': last_name,
-                    'year_of_birth': year_of_birth
-                })
-                st.success('Informazioni aggiornate con successo!')
+                if st.button('Aggiorna Informazioni'):
+                    # Aggiorna i dati nel Firestore
+                    db.collection('users').document(st.session_state.user_email).update({
+                        'first_name': first_name,
+                        'last_name': last_name,
+                        'year_of_birth': year_of_birth
+                    })
+                    st.success('Informazioni aggiornate con successo!')
 
+            else:
+                st.error('Nessuna informazione trovata.')
         else:
-            st.error('Nessuna informazione trovata.')
+            st.error('Devi prima effettuare il login.')
 
 if __name__ == '__main__':
     app()
