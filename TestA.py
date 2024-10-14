@@ -6,8 +6,10 @@ import os
 # Percorso del file delle credenziali
 firebase_credentials = os.getenv('FIREBASE_CREDENTIALS')
 cred = credentials.Certificate(eval(firebase_credentials))
+
 # Firebase API Key
 FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
+
 # Inizializza Firebase solo se non è già stato fatto
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
