@@ -26,8 +26,8 @@ def authenticate_user(email, password):
         "returnSecureToken": True
     }
     response = requests.post(url, json=payload)
-    return response.json()
-
+    result = response.json()
+    return result
 
 # Funzione per inviare una email di recupero password
 def send_password_reset(email):
@@ -42,11 +42,10 @@ def send_password_reset(email):
         return {"error": result['error']['message']}
     return result
 
-
 def app():
     # Finestra laterale
     st.sidebar.title("Menu")
-
+    
     # Pulsante "HOME"
     if st.sidebar.button("HOME"):
         st.session_state.page = "home"
@@ -80,7 +79,7 @@ def app():
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     st.success(f'Benvenuto, {email}!')
                     st.session_state.page = "user_profile"  # Passa alla pagina del profilo
-                    st.rerun()  # Ricarica per mostrare la nuova pagina
+                    st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
                 else:
                     error_message = response.get('error', {}).get('message', 'Errore di autenticazione')
                     st.error(f'Login fallito: {error_message}')
@@ -88,7 +87,7 @@ def app():
         # Sezione Sign Up
         elif selezione == 'Sign Up':
             st.session_state.page = "signup_email"  # Cambia a una nuova pagina per la registrazione dell'email
-            st.rerun()  # Ricarica l'app per visualizzare la nuova pagina
+            st.experimental_rerun()  # Ricarica l'app per visualizzare la nuova pagina
 
         # Sezione Recupera password
         elif selezione == 'Recupera password':
@@ -116,7 +115,7 @@ def app():
 
                 # Passa alla pagina successiva per inserire nome, cognome e data di nascita
                 st.session_state.page = "signup_details"
-                st.rerun()  # Ricarica per mostrare la nuova pagina
+                st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
 
             except Exception as e:
                 st.error('Creazione account fallita: ' + str(e))
@@ -144,36 +143,32 @@ def app():
             st.success('Registrazione completata con successo!')
 
             st.session_state.page = "home"  # Torna alla pagina principale dopo la registrazione
-            st.rerun()  # Ricarica per mostrare la pagina principale
+            st.experimental_rerun()  # Ricarica per mostrare la pagina principale
 
     # Nuova pagina per il profilo utente
     elif st.session_state.page == "user_profile":
         st.title('Profilo Utente')
         st.markdown('Ecco le tue informazioni.')
 
-        # Verifica se l'email dell'utente è presente
-        if 'user_email' in st.session_state:
-            # Recupera i dati dell'utente da Firestore
-            user_doc = db.collection('users').document(st.session_state.user_email).get()
-            if user_doc.exists:
-                user_data = user_doc.to_dict()
-                first_name = st.text_input('Nome', value=user_data.get('first_name'), key='first_name')
-                last_name = st.text_input('Cognome', value=user_data.get('last_name'), key='last_name')
-                year_of_birth = st.number_input('Anno di nascita', min_value=1900, max_value=2024, step=1, value=user_data.get('year_of_birth'))
+        # Recupera i dati dell'utente da Firestore
+        user_doc = db.collection('users').document(st.session_state.user_email).get()
+        if user_doc.exists:
+            user_data = user_doc.to_dict()
+            first_name = st.text_input('Nome', value=user_data.get('first_name'), key='first_name')
+            last_name = st.text_input('Cognome', value=user_data.get('last_name'), key='last_name')
+            year_of_birth = st.number_input('Anno di nascita', min_value=1900, max_value=2024, step=1, value=user_data.get('year_of_birth'))
 
-                if st.button('Aggiorna Informazioni'):
-                    # Aggiorna i dati nel Firestore
-                    db.collection('users').document(st.session_state.user_email).update({
-                        'first_name': first_name,
-                        'last_name': last_name,
-                        'year_of_birth': year_of_birth
-                    })
-                    st.success('Informazioni aggiornate con successo!')
+            if st.button('Aggiorna Informazioni'):
+                # Aggiorna i dati nel Firestore
+                db.collection('users').document(st.session_state.user_email).update({
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'year_of_birth': year_of_birth
+                })
+                st.success('Informazioni aggiornate con successo!')
 
-            else:
-                st.error('Nessuna informazione trovata.')
         else:
-            st.error('Devi prima effettuare il login.')
+            st.error('Nessuna informazione trovata.')
 
 if __name__ == '__main__':
     app()
