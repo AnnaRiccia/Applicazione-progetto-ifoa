@@ -3,16 +3,18 @@ import firebase_admin
 import requests
 from firebase_admin import credentials, auth
 import os
-# Percorso del file delle credenziali
+
+
 firebase_credentials = os.getenv('FIREBASE_CREDENTIALS')
 cred = credentials.Certificate(eval(firebase_credentials))
-
-# Firebase API Key
-FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
 
 # Inizializza Firebase solo se non è già stato fatto
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
+
+# Inserisci qui la tua Firebase API Key direttamente
+FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
+
 
 # Funzione per autenticare l'utente con email e password tramite la REST API di Firebase
 def authenticate_user(email, password):
