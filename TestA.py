@@ -88,6 +88,9 @@ def app():
                     user = auth.create_user(email=email, password=password)
                     st.success('Account creato con successo!')
                     st.session_state.user_email = email  # Salva l'email dell'utente
+                    
+                    # Reindirizza alla pagina del profilo utente
+                    st.session_state.page = "user_profile"  # Cambia pagina a "user_profile"
                 except Exception as e:
                     st.warning('Creazione account fallita. Riprova.')  # Messaggio generico
 
@@ -128,3 +131,4 @@ def app():
 
 if __name__ == '__main__':
     app()
+
