@@ -74,21 +74,6 @@ def app():
                 else:
                     error_message = response.get('error', {}).get('message', 'Errore di autenticazione')
                     st.error(f'Login fallito: {error_message}')
-            # Sezione per il recupero password durante il login
-            if st.button('Recupera Password'):
-                st.session_state.show_reset = True  # Mostra la sezione recupero
-
-        # Sezione di recupero password, mostrata quando il pulsante viene cliccato
-        if st.session_state.get('show_reset', False):
-            st.markdown('## Recupera la tua password')
-            reset_email = st.text_input('Inserisci il tuo indirizzo email per il recupero')
-            if st.button('Invia Richiesta di Recupero'):
-                response = send_password_reset(reset_email)
-                if 'email' in response:
-                    st.success('Email di recupero inviata con successo! Controlla la tua casella email.')
-                else:
-                    error_message = response.get('error', {}).get('message', 'Errore durante il recupero password')
-                    st.error(f'Recupero password fallito: {error_message}')
 
         elif selezione == 'Sign Up':  # Sezione di registrazione
             st.markdown('## Crea le tue credenziali!')
