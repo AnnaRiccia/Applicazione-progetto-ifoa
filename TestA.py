@@ -74,12 +74,12 @@ def app():
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     st.success(f'Benvenuto, {email}!')
                     st.markdown(
-                         """
-                        <div style="position: fixed; bottom: 170px; left: 50%; transform: translateX(-50%); background-color: #90EE90; color: white; padding: 10px 20px; border-radius: 5px; text-align: center;">
-                        🎉 Hooray! Good job, but now double click
-                        </div>
-                        """,
-                        unsafe_allow_html=True
+                        """
+                            <div style="position: fixed; bottom: 170px; left: 50%; transform: translateX(-50%); background-color: #90EE90; color: white; padding: 10px 20px; border-radius: 5px; text-align: center;">
+                            🎉 Hooray! Good job, but now double click
+                            </div>
+                            """,
+                            unsafe_allow_html=True
                     )
                     st.write("<div style='height: 50px;'></div>", unsafe_allow_html=True)
                     st.session_state.page = "user_profile"  # Passa alla pagina del profilo
