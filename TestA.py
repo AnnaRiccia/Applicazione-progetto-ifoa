@@ -141,7 +141,7 @@ def app():
             st.success('Registrazione completata con successo!')
 
             st.session_state.page = "home"  # Torna alla pagina principale dopo la registrazione
-            st.experimental_rerun()  # Ricarica per mostrare la pagina principale
+            st.rerun()  # Ricarica per mostrare la pagina principale
 
     # Nuova pagina per il profilo utente
     elif st.session_state.page == "user_profile":
