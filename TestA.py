@@ -73,7 +73,7 @@ def app():
                 if 'idToken' in response:
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     st.success(f'Benvenuto, {email}!')
-                    st.toast('Hooray! good job, but now " + "DOUBLE CLICK".upper()', icon='🎉')
+                    st.toast('Hooray! good job, but now ", icon='🎉')
                     st.session_state.page = "user_profile"  # Passa alla pagina del profilo
                 else:
                     st.warning('Credenziali errate. Riprova.') 
