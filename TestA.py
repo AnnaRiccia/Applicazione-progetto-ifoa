@@ -88,6 +88,7 @@ def app():
                     # Crea un nuovo utente con email e password
                     user = auth.create_user(email=email, password=password)
                     st.success('Account creato con successo!')
+                    st.text('doppio clic')
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     
                     # Reindirizza alla pagina per inserire informazioni aggiuntive
