@@ -75,8 +75,8 @@ def app():
                     st.success(f'Benvenuto, {email}!')
                     st.markdown(
                          """
-                        <div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: #007BFF; color: white; padding: 10px 20px; border-radius: 5px; text-align: center;">
-                        🎉 Hooray! Good job, but now
+                        <div style="position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background-color: #007BFF; color: white; padding: 10px 20px; border-radius: 5px; text-align: center;">
+                        🎉 Hooray! Good job, but now double click
                         </div>
                         """,
                         unsafe_allow_html=True
