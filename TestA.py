@@ -96,6 +96,15 @@ def app():
                     # Crea un nuovo utente con email e password
                     user = auth.create_user(email=email, password=password)
                     st.success('Account creato con successo!')
+                    st.markdown(
+                         """
+                        <div style="position: fixed; bottom: 170px; left: 50%; transform: translateX(-50%); background-color: #007BFF; color: white; padding: 10px 20px; border-radius: 5px; text-align: center;">
+                        🎉 Hooray! Good job, but now double click
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+                    st.write("<div style='height: 50px;'></div>", unsafe_allow_html=True)
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     
                     # Reindirizza alla pagina per inserire informazioni aggiuntive
