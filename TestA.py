@@ -74,9 +74,7 @@ def app():
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     st.success(f'Benvenuto, {email}!')
                     st.session_state.page = "user_profile"  # Passa alla pagina del profilo
-                    st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
                 else:
-                    # Mostra un messaggio generico senza dettagli sugli errori
                     st.warning('Credenziali errate. Riprova.') 
 
         # Sezione Sign Up
@@ -90,7 +88,6 @@ def app():
                     user = auth.create_user(email=email, password=password)
                     st.success('Account creato con successo!')
                     st.session_state.user_email = email  # Salva l'email dell'utente
-                    st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
                 except Exception as e:
                     st.warning('Creazione account fallita. Riprova.')  # Messaggio generico
 
@@ -126,8 +123,6 @@ def app():
                     'year_of_birth': year_of_birth
                 })
                 st.success('Informazioni aggiornate con successo!')
-                st.experimental_rerun()  # Ricarica per mostrare le nuove informazioni
-
         else:
             st.warning('Nessuna informazione trovata.')  # Messaggio generico
 
