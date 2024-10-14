@@ -76,8 +76,8 @@ def app():
                     st.session_state.page = "user_profile"  # Passa alla pagina del profilo
                     st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
                 else:
-                    error_message = response.get('error', {}).get('message', 'Errore di autenticazione')
-                    st.error(f'Login fallito: {error_message}')
+                    # Mostra un messaggio generico senza dettagli sugli errori
+                    st.warning('Credenziali errate. Riprova.') 
 
         # Sezione Sign Up
         elif selezione == 'Sign Up':
@@ -92,7 +92,7 @@ def app():
                     st.session_state.user_email = email  # Salva l'email dell'utente
                     st.experimental_rerun()  # Ricarica per mostrare la nuova pagina
                 except Exception as e:
-                    st.error('Creazione account fallita: ' + str(e))
+                    st.warning('Creazione account fallita. Riprova.')  # Messaggio generico
 
         # Sezione Recupera password
         elif selezione == 'Recupera password':
@@ -103,7 +103,7 @@ def app():
                 if 'error' not in response:
                     st.success('Email di recupero inviata con successo! Controlla la tua casella email.')
                 else:
-                    st.error(f'Recupero password fallito: {response["error"]}')
+                    st.warning('Invio della richiesta di recupero fallito. Riprova.')  # Messaggio generico
 
     # Nuova pagina per il profilo utente
     elif st.session_state.page == "user_profile":
@@ -129,7 +129,7 @@ def app():
                 st.experimental_rerun()  # Ricarica per mostrare le nuove informazioni
 
         else:
-            st.error('Nessuna informazione trovata.')
+            st.warning('Nessuna informazione trovata.')  # Messaggio generico
 
 if __name__ == '__main__':
     app()
