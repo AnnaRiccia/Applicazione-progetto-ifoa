@@ -41,29 +41,18 @@ def send_password_reset(email):
 
 
 def app():
-    # Finestra laterale
     st.sidebar.title("Menu")
-
-    # Pulsante "HOME"
     if st.sidebar.button("HOME"):
         st.session_state.page = "home"
-
-    # Pulsante "Sei un giocatore?"
     if st.sidebar.button("Devi registrarti?"):
         st.session_state.page = "login_signup"
-
-    # Pagina principale
     if st.session_state.get('page', 'home') == "home":
         st.title('Registrazione')
         st.markdown('Applicazione in cantiere!')
         st.markdown('Questa è la pagina principale. Puoi navigare per accedere o registrarti.')
-
-    # Sezione di login/signup/recupero password
     elif st.session_state.page == "login_signup":
-        st.title('Modigliana Calcio')
+        st.title('Pagina di accesso')
         selezione = st.selectbox('Login/Signup', ['Login', 'Sign Up', 'Recupera password'])
-
-        # Sezione Login
         if selezione == 'Login':
             st.markdown('## Sei già registrato?')
             email = st.text_input('Indirizzo Email')
@@ -76,7 +65,7 @@ def app():
                     st.markdown(
                         """
                         <div style="position: fixed; bottom: 170px; left: 50%; transform: translateX(-50%); background-color: #90EE90; color: black; padding: 10px 20px; border-radius: 5px; text-align: center;">
-                        🎉 Bentornato!
+                        Bentornato!
                         </div>
                         """,
                         unsafe_allow_html=True
@@ -85,21 +74,18 @@ def app():
                     st.session_state.page = "user_profile"  # Passa alla pagina del profilo
                 else:
                     st.warning('Credenziali errate. Riprova.')
-
-        # Sezione Sign Up
         elif selezione == 'Sign Up':
             st.markdown('### Registrati qui')
             email = st.text_input('Indirizzo Email (Registrazione)')
             password = st.text_input('Password (Registrazione)', type='password')
             if st.button('Crea Account'):
                 try:
-                    # Crea un nuovo utente con email e password
                     user = auth.create_user(email=email, password=password)
                     st.success('Account creato con successo!')
                     st.markdown(
                         """
                         <div style="position: fixed; bottom: 170px; left: 50%; transform: translateX(-50%); background-color: #90EE90; color: black; padding: 10px 20px; border-radius: 5px; text-align: center;">
-                        🎉 Account creato con successo
+                        Account creato con successo
                         </div>
                         """,
                         unsafe_allow_html=True
@@ -107,9 +93,7 @@ def app():
                     st.write("<div style='height: 50px;'></div>", unsafe_allow_html=True)
                     st.session_state.user_email = email  # Salva l'email dell'utente
                 except Exception as e:
-                    st.warning('Creazione account fallita. Riprova.')  # Messaggio generico
-
-        # Sezione Recupera password
+                    st.warning('Creazione account fallita. Riprova.')
         elif selezione == 'Recupera password':
             st.markdown('## Recupera la tua password')
             reset_email = st.text_input('Inserisci il tuo indirizzo email per il recupero')
@@ -120,6 +104,5 @@ def app():
                 else:
                     st.warning('Invio della richiesta di recupero fallito. Riprova.')  # Messaggio generico
 
-# Avvia l'app
 if __name__ == '__main__':
     app()
