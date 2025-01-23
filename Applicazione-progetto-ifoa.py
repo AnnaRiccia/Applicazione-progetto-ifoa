@@ -70,7 +70,6 @@ def app():
         st.markdown("<hr>", unsafe_allow_html=True)
         st.title('Come ho creato questa applicazione?')
         image = st.image("protagonisti.jpg")
-        image = st.image("auth.jpg")
         
     elif st.session_state.page == "login_signup":
         st.title('Pagina di accesso')
