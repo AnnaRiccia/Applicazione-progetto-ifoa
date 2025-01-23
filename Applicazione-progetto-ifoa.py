@@ -59,7 +59,7 @@ def app():
     """, unsafe_allow_html=True
     )
     st.sidebar.title("Menu")
-    if st.sidebar.button("HOME"):
+    if st.sidebar.button("Home"):
         st.session_state.page = "home"
     if st.sidebar.button("Utente"):
         st.session_state.page = "login_signup"
