@@ -41,15 +41,35 @@ def send_password_reset(email):
 
 
 def app():
+    st.markdown(
+    """
+    <style>
+    [data-testid="stSidebar"] {
+        background-color: #2E2E2E;  /* Grigio scuro */
+        color: white;               /* Colore del testo */
+    }
+    .stSidebar button {
+        background-color: #525252; /* Pulsanti grigi */
+        color: white;
+    }
+    .stSidebar button:hover {
+        background-color: #FF6600; /* Colore hover */
+    }
+    </style>
+    """, unsafe_allow_html=True
+    )
     st.sidebar.title("Menu")
     if st.sidebar.button("HOME"):
         st.session_state.page = "home"
-    if st.sidebar.button("Devi registrarti?"):
+    if st.sidebar.button("Utente"):
         st.session_state.page = "login_signup"
     if st.session_state.get('page', 'home') == "home":
         st.title('Registrazione')
         st.markdown('Applicazione in cantiere!')
         st.markdown('Questa è la pagina principale. Puoi navigare per accedere o registrarti.')
+        st.markdown("<hr>", unsafe_allow_html=True)
+        
+        
     elif st.session_state.page == "login_signup":
         st.title('Pagina di accesso')
         selezione = st.selectbox('Login/Signup', ['Login', 'Sign Up', 'Recupera password'])
