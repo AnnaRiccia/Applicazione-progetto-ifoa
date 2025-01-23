@@ -68,7 +68,11 @@ def app():
         st.markdown('Applicazione in cantiere!')
         st.markdown('Questa è la pagina principale. Puoi navigare per accedere o registrarti.')
         st.markdown("<hr>", unsafe_allow_html=True)
-        
+        st.title('Come ho creato questa applicazione?')
+        st.markdown(
+            "* Streamlit\n")
+        image = st.image("my_image.jpg")
+        st.image(image)
         
     elif st.session_state.page == "login_signup":
         st.title('Pagina di accesso')
