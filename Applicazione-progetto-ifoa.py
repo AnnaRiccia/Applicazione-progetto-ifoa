@@ -71,7 +71,7 @@ def app():
         st.title('Come ho creato questa applicazione?')
         st.markdown(
             "* Streamlit\n")
-        image = st.image("my_image.jpg")
+        image = st.image("streamlit.webp")
         st.image(image)
         
     elif st.session_state.page == "login_signup":
