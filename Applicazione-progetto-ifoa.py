@@ -65,7 +65,7 @@ def app():
         st.session_state.page = "login_signup"
     if st.session_state.get('page', 'home') == "home":
         st.title('Registrazione')
-        st.markdown('Applicazione in cantiere!')
+        st.markdown('Applicazione Streamlit')
         st.markdown('Questa è la pagina principale. Puoi navigare per accedere o registrarti.')
         st.markdown("<hr>", unsafe_allow_html=True)
         st.title('Come ho creato questa applicazione?')
